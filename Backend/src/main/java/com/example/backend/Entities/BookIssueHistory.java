@@ -1,4 +1,4 @@
-package com.example.backend.Entity;
+package com.example.backend.Entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;

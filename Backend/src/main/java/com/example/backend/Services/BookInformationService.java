@@ -1,6 +1,6 @@
-package com.example.backend.Service;
+package com.example.backend.Services;
 
-import com.example.backend.Entity.BooksInformation;
+import com.example.backend.Entities.BooksInformation;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

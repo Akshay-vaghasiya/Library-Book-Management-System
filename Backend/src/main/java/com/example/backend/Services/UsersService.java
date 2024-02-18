@@ -1,11 +1,11 @@
-package com.example.backend.Service;
+package com.example.backend.Services;
 
-import com.example.backend.Entity.Users;
+import com.example.backend.Entities.Users;
 import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public interface UserService {
+public interface UsersService {
 
     public Users saveUser(Users users);
     public void deleteUser(Long id);
