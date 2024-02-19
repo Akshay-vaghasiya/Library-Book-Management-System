@@ -19,13 +19,13 @@ public class BooksInformation {
     @Column(name = "bookinfo_id")
     private Long id;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title")
     private String title;
 
     @Column(name = "author")
     private String author;
 
-    @Column(name = "isbn", unique = true, nullable = false)
+    @Column(name = "isbn")
     private String isbn;
 
     @Column(name = "category")
@@ -41,7 +41,21 @@ public class BooksInformation {
     private String image;
 
     @OneToMany(mappedBy = "booksInformation", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference(value = "book_bookinfo")
     private List<Books> books;
 
+    @Override
+    public String toString() {
+        return "BooksInformation{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", isbn='" + isbn + '\'' +
+                ", category='" + category + '\'' +
+                ", stock=" + stock +
+                ", available=" + available +
+                ", image='" + image + '\'' +
+                ", books=" + books +
+                '}';
+    }
 }

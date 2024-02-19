@@ -23,13 +23,13 @@ public class Books {
     @Column(name = "status", nullable = false)
     private String status = "available";
 
-    @ManyToOne
-    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonBackReference(value = "book_bookinfo")
     @JoinColumn(name = "bookinfo_id", nullable = false)
     private BooksInformation booksInformation;
 
     @OneToMany(mappedBy = "books", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference(value = "book_history")
     private List<BookIssueHistory> bookIssueHistories;
 
 }

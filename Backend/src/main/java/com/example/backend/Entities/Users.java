@@ -32,7 +32,7 @@ public class Users {
     private float total_penalty=0;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference(value = "user_history")
     private List<BookIssueHistory> bookIssueHistories;
 
 }

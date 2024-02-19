@@ -36,12 +36,12 @@ public class BookIssueHistory {
 
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "book_history")
     private Books books;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "user_history")
     private Users user;
 
 }
