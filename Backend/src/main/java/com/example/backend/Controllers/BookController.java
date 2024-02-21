@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin()
 @RequestMapping("/book")
 public class BookController {
 
@@ -21,7 +21,7 @@ public class BookController {
     @PostMapping(value = "/addbook")
     public ResponseEntity<?> addBook(@RequestBody BooksInformation booksInformation)
     {
-        return ResponseEntity.ok(bookInformationService.saveBooksInformation(booksInformation));
+        return ResponseEntity.ok(this.bookInformationService.saveBooksInformation(booksInformation));
     }
 
 

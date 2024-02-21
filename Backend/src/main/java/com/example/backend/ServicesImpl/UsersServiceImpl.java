@@ -1,5 +1,6 @@
 package com.example.backend.ServicesImpl;
 
+import com.example.backend.Entities.Roles;
 import com.example.backend.Entities.Users;
 import com.example.backend.Repository.UsersRepository;
 import com.example.backend.Services.UsersService;
@@ -53,5 +54,37 @@ public class UsersServiceImpl implements UsersService {
         }
 
         return null;
+    }
+
+    @Override
+    public String checkAdminLoginDetail(Users users) {
+
+        Users users1 = getUserByEmail(users.getEmail());
+
+        if(users1 == null)
+        {
+            return "This user is not exist";
+        }
+        else {
+            if(users1.getPassword().equals(users.getPassword()))
+            {
+                List<Roles> roles = users1.getRoles();
+
+                for(Roles role : roles)
+                {
+                    if(role.getRole().equals("ADMIN"))
+                    {
+                        return "Admin Successfully Login";
+                    }
+                }
+
+                return "This user is not an Admin";
+            }
+            else
+            {
+                return "Please enter correct password";
+            }
+        }
+
     }
 }

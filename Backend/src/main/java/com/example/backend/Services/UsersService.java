@@ -12,4 +12,5 @@ public interface UsersService {
     public List<Users> getAllUser();
     public Users getUserById(Long id);
     public Users getUserByEmail(String email);
+    public String checkAdminLoginDetail(Users users);
 }

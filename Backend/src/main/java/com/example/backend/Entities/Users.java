@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 @Entity
@@ -19,7 +18,7 @@ public class Users {
     @Column(name = "user_id")
     private Long uid;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
     @Column(name = "email", nullable = false, unique = true)
@@ -30,6 +29,9 @@ public class Users {
 
     @Column(name = "total_penalty")
     private float total_penalty=0;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Roles> roles;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "user_history")
