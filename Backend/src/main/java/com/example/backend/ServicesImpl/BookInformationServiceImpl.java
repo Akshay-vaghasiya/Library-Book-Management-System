@@ -50,7 +50,7 @@ public class BookInformationServiceImpl implements BookInformationService {
         }
         else
         {
-            return "Book already exist";
+            return "Book already exist.";
         }
 
     }
@@ -113,42 +113,7 @@ public class BookInformationServiceImpl implements BookInformationService {
 
         if((long)booksInformation.getStock() != (long)(booksInformation1.getStock()))
         {
-            if(booksInformation1.getStock() > booksInformation.getStock())
-            {
-                int delete_book = (int) (booksInformation1.getStock() - booksInformation.getStock());
-
-                List<Books> books = booksInformation1.getBooks();
-
-                List<Books> books1 = new ArrayList<>();
-
-                for(Books book : books)
-                {
-                    if(books1.size() >= books.size()-delete_book)
-                    {
-
-                        booksService.deleteBooks(book.getBid());
-                    }
-                    else
-                    {
-                        if(book.getStatus().equals("available"))
-                        {
-                            books1.add(book);
-                        }
-                    }
-                }
-
-                System.out.println(books1);
-
-                if(books1.size() < books.size()-delete_book)
-                {
-                    return "books are not available";
-                }
-
-                booksInformation.setBooks(books1);
-
-                booksInformationRepository.save(booksInformation);
-            }
-            else
+            if(booksInformation1.getStock() < booksInformation.getStock())
             {
                 List<Books> books = booksInformation1.getBooks();
 
@@ -161,11 +126,10 @@ public class BookInformationServiceImpl implements BookInformationService {
                 }
 
                 booksInformation.setBooks(books);
-
-                booksInformationRepository.save(booksInformation);
             }
         }
 
+        booksInformationRepository.save(booksInformation);
 
         return "Book is successfully Updated";
     }

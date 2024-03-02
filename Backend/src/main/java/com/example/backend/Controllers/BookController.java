@@ -1,22 +1,26 @@
 package com.example.backend.Controllers;
 
 import com.example.backend.Entities.BooksInformation;
+import com.example.backend.Services.BookInformationService;
+import com.example.backend.Services.BooksService;
 import com.example.backend.ServicesImpl.BookInformationServiceImpl;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin()
+@CrossOrigin("*")
 @RequestMapping("/book")
 public class BookController {
 
-    private BookInformationServiceImpl bookInformationService;
+    @Autowired
+    private BookInformationService bookInformationService;
 
     @Autowired
-    public BookController(BookInformationServiceImpl bookInformationService) {
-        this.bookInformationService = bookInformationService;
-    }
+    private BooksService booksService;
+
 
     @PostMapping(value = "/addbook")
     public ResponseEntity<?> addBook(@RequestBody BooksInformation booksInformation)
@@ -43,5 +47,10 @@ public class BookController {
         return ResponseEntity.ok(this.bookInformationService.updateBooksInfromation(booksInformation, bookId));
     }
 
+    @DeleteMapping("/deletebook/{Id}/{bookId}")
+    public ResponseEntity<?> deleteOneBook(@PathVariable Long Id,@PathVariable Long bookId)
+    {
+        return ResponseEntity.ok(this.booksService.deleteBook(Id, bookId));
+    }
 
 }

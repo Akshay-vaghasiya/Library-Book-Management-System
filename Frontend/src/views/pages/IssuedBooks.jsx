@@ -3,8 +3,8 @@ import React from 'react'
 const IssuedBooks = () => {
   return (
     <>
-      <div class="p-4 sm:ml-64">
-      <div class=" mt-[5.5rem]">
+      <div className="p-4 sm:ml-64">
+      <div className=" mt-[5.5rem]">
         IssuedBooks
 
       </div>

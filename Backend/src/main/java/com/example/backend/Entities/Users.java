@@ -28,7 +28,7 @@ public class Users {
     private String password;
 
     @Column(name = "total_penalty")
-    private float total_penalty=0;
+    private float total_penalty = 0;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Roles> roles;

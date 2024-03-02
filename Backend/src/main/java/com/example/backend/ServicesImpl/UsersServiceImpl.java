@@ -87,4 +87,36 @@ public class UsersServiceImpl implements UsersService {
         }
 
     }
+
+    @Override
+    public String checkUserLoginDetail(Users users) {
+
+        Users users1 = getUserByEmail(users.getEmail());
+
+        if(users1 == null)
+        {
+            return "This user is not exist";
+        }
+        else {
+            if(users1.getPassword().equals(users.getPassword()))
+            {
+                List<Roles> roles = users1.getRoles();
+
+                for(Roles role : roles)
+                {
+                    if(role.getRole().equals("USER"))
+                    {
+                        return "User Successfully Login";
+                    }
+                }
+
+                return "This user is an Admin";
+            }
+            else
+            {
+                return "Please enter correct password";
+            }
+        }
+
+    }
 }
