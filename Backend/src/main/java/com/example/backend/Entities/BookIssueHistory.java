@@ -20,16 +20,16 @@ public class BookIssueHistory {
     private Long hid;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column(name = "issue_data")
-    private Date issue_data;
+    @Column(name = "issue_date")
+    private Date issue_date;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "due_date")
-    private Date dueDate;
+    private Date due_date;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column(name = "return_data")
-    private Date return_data;
+    @Column(name = "return_date",nullable = true)
+    private Date return_date;
 
     @Column(name = "penalty", nullable = true)
     private float penalty = 0;

@@ -2,11 +2,14 @@ package com.example.backend.ServicesImpl;
 
 import com.example.backend.Entities.Roles;
 import com.example.backend.Entities.Users;
+import com.example.backend.Repository.RolesRepository;
 import com.example.backend.Repository.UsersRepository;
 import com.example.backend.Services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.management.relation.Role;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -14,15 +17,29 @@ public class UsersServiceImpl implements UsersService {
 
     UsersRepository usersRepository;
 
+    RolesRepository rolesRepository;
+
     @Autowired
-    public UsersServiceImpl(UsersRepository usersRepository) {
+    public UsersServiceImpl(UsersRepository usersRepository, RolesRepository rolesRepository) {
         this.usersRepository = usersRepository;
+        this.rolesRepository = rolesRepository;
     }
 
     @Override
-    public Users saveUser(Users users) {
+    public String saveUserasUser(Users users) {
+        Roles roles = rolesRepository.getReferenceById(2L);
+
+        List<Roles> roles1 = users.getRoles();
+        if(roles1 == null) {
+            roles1 = new ArrayList<>();
+        }
+        roles1.add(roles);
+
+        users.setRoles(roles1);
+
         usersRepository.save(users);
-        return users;
+
+        return "User register successfully";
     }
 
     @Override
@@ -118,5 +135,25 @@ public class UsersServiceImpl implements UsersService {
             }
         }
 
+    }
+
+    @Override
+    public String saveUserasAdmin(Users users) {
+
+        Roles roles = rolesRepository.getReferenceById(1L);
+
+        List<Roles> roles1 = users.getRoles();
+
+        if(roles1 == null)
+        {
+            roles1 = new ArrayList<>();
+        }
+        roles1.add(roles);
+
+        users.setRoles(roles1);
+
+        usersRepository.save(users);
+
+        return "Admin register successfully";
     }
 }

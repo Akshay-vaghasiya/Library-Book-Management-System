@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/user")
 @CrossOrigin("*")
 public class LoginController {
 
@@ -21,9 +21,21 @@ public class LoginController {
         return ResponseEntity.ok(this.usersService.checkAdminLoginDetail(users));
     }
 
+    @PostMapping(value = "/adminregister")
+    public ResponseEntity<?> registerAdmin(@RequestBody Users users)
+    {
+        return ResponseEntity.ok(this.usersService.saveUserasAdmin(users));
+    }
+
     @PostMapping(value = "/userlogin")
     public ResponseEntity<?> userLogin(@RequestBody Users users)
     {
         return ResponseEntity.ok(this.usersService.checkUserLoginDetail(users));
+    }
+
+    @PostMapping(value = "/userregister")
+    public ResponseEntity<?> registerUser(@RequestBody Users users)
+    {
+        return ResponseEntity.ok(this.usersService.saveUserasUser(users));
     }
 }

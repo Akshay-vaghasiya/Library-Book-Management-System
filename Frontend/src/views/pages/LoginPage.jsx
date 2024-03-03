@@ -46,7 +46,7 @@ const LoginPage = () => {
 
         try
         {
-            const response = await axios.post(import.meta.env.VITE_url + `/login/adminlogin`, obj);
+            const response = await axios.post(import.meta.env.VITE_url + `/user/adminlogin`, obj);
 
             if(response.data === "Admin Successfully Login")
             {

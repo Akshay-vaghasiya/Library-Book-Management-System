@@ -7,24 +7,14 @@ const Editbookpopup = ({ book }) => {
 
   const {getBooks} = useBookContext();
   const [imageobj, setImageobj] = useState();
-  const [image, setImage] = useState();
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [isbn, setIsbn] = useState("");
-  const [category, setCategory] = useState("");
-  const [stock, setStock] = useState();
-  const [available, setAvailable] = useState();
+  const [image, setImage] = useState(book?.image);
+  const [title, setTitle] = useState(book?.title);
+  const [author, setAuthor] = useState(book?.author);
+  const [isbn, setIsbn] = useState(book?.isbn);
+  const [category, setCategory] = useState(book?.category);
+  const [stock, setStock] = useState(book?.stock);
+  const [available, setAvailable] = useState(book?.available);
   const [isUpload, setIsUpload] = useState(false);
-
-  useEffect(() => {
-    setAuthor(book?.author);
-    setAvailable(book?.available);
-    setTitle(book?.title);
-    setCategory(book?.category);
-    setStock(book?.stock);
-    setIsbn(book?.isbn);
-    setImage(book?.image);
-  }, []);
 
   const handleChange = (e) => {
     e.preventDefault();

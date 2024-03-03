@@ -7,11 +7,12 @@ import java.util.List;
 @Component
 public interface UsersService {
 
-    public Users saveUser(Users users);
+    public String saveUserasUser(Users users);
     public void deleteUser(Long id);
     public List<Users> getAllUser();
     public Users getUserById(Long id);
     public Users getUserByEmail(String email);
     public String checkAdminLoginDetail(Users users);
     public String checkUserLoginDetail(Users users);
+    public String saveUserasAdmin(Users users);
 }
