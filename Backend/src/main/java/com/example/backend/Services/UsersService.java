@@ -13,7 +13,7 @@ public interface UsersService {
     public List<Users> getAllUser();
     public Users getUserById(Long id);
     public Users getUserByEmail(String email);
-    public String checkAdminLoginDetail(Users users);
-    public String checkUserLoginDetail(Users users);
-    public String saveUserasAdmin(Users users);
+    public String checkAdminLoginDetail(LoginDto users);
+    public String checkUserLoginDetail(LoginDto users);
+    public String saveUserasAdmin(LoginDto users);
 }

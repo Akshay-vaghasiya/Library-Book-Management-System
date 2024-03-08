@@ -13,6 +13,7 @@ import IssueBook from './views/pages/IssueBook'
 import IssuedBooks from './views/pages/IssuedBooks'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import UserRegister from './views/pages/UserRegister'
 
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
           <Route path='/showbooks' element={isLogin ? <ShowBooks /> : <LoginPage />} />
           <Route path='/issuebook' element={isLogin ? <IssueBook /> : <LoginPage />} />
           <Route path='/issuedbooks' element={isLogin ? <IssuedBooks /> : <LoginPage />} />
+          <Route path='/userregister' element={isLogin ? <UserRegister /> : <LoginPage />} />
           <Route path='*' element={isLogin ? <Dashboard />: <LoginPage />} />
 
         </Routes>

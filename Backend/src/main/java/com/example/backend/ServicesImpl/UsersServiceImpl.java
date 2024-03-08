@@ -6,6 +6,7 @@ import com.example.backend.Repository.RolesRepository;
 import com.example.backend.Repository.UsersRepository;
 import com.example.backend.Services.UsersService;
 import com.example.backend.payload.LoginDto;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,16 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public String saveUserasUser(LoginDto users) {
+
+        List<Users> userList = usersRepository.findAll();
+
+        for(Users user : userList)
+        {
+            if(users.getEmail().equals(user.getEmail()))
+            {
+                return "This email already exist.";
+            }
+        }
 
         Users users1 = new Users();
         users1.setName(users.getName());
@@ -80,7 +91,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public String checkAdminLoginDetail(Users users) {
+    public String checkAdminLoginDetail(LoginDto users) {
 
         Users users1 = getUserByEmail(users.getEmail());
 
@@ -112,7 +123,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public String checkUserLoginDetail(Users users) {
+    public String checkUserLoginDetail(LoginDto users) {
 
         Users users1 = getUserByEmail(users.getEmail());
 
@@ -144,11 +155,17 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public String saveUserasAdmin(Users users) {
+    public String saveUserasAdmin(LoginDto users) {
+
+        Users users1 = getUserByEmail(users.getEmail());
 
         Roles roles = rolesRepository.getReferenceById(1L);
 
-        List<Roles> roles1 = users.getRoles();
+        if(users1 == null)
+        {
+            users1 = new Users();
+        }
+        List<Roles> roles1 = users1.getRoles();
 
         if(roles1 == null)
         {
@@ -156,9 +173,9 @@ public class UsersServiceImpl implements UsersService {
         }
         roles1.add(roles);
 
-        users.setRoles(roles1);
+        users1.setRoles(roles1);
 
-        usersRepository.save(users);
+        usersRepository.save(users1);
 
         return "Admin register successfully";
     }
