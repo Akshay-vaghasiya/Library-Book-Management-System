@@ -3,6 +3,7 @@ package com.example.backend.Controllers;
 import com.example.backend.Entities.Users;
 import com.example.backend.Services.UsersService;
 import com.example.backend.ServicesImpl.UsersServiceImpl;
+import com.example.backend.payload.LoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +35,8 @@ public class LoginController {
     }
 
     @PostMapping(value = "/userregister")
-    public ResponseEntity<?> registerUser(@RequestBody Users users)
+    public ResponseEntity<?> registerUser(@RequestBody LoginDto loginDto)
     {
-        return ResponseEntity.ok(this.usersService.saveUserasUser(users));
+        return ResponseEntity.ok(this.usersService.saveUserasUser(loginDto));
     }
 }

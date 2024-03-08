@@ -8,7 +8,12 @@ import com.example.backend.Repository.UsersRepository;
 import com.example.backend.Services.BookIssueHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 @Service
 public class BookIssueHistoryServiceImpl implements BookIssueHistoryService {
@@ -53,7 +58,6 @@ public class BookIssueHistoryServiceImpl implements BookIssueHistoryService {
         }
 
         booksInformation.setAvailable(booksInformation.getAvailable()-1);
-
         Books books = booksRepository.getReferenceById(bid);
 
         if(books == null)
@@ -61,13 +65,24 @@ public class BookIssueHistoryServiceImpl implements BookIssueHistoryService {
             return "This book id is invalid";
         }
 
+        if(books.getStatus().equals("not available"))
+        {
+            return "This book already issued.";
+        }
+
         books.setStatus("not available");
 
 
         bookIssueHistory.setBooks(books);
         bookIssueHistory.setUser(users);
+        bookIssueHistory.setBookname(booksInformation.getTitle());
+        bookIssueHistory.setBookid(booksInformation.getId());
 
         bookIssueHistoryRepository.save(bookIssueHistory);
+
+        List<BookIssueHistory> bookIssueHistories = users.getBookIssueHistories();
+        bookIssueHistories.add(bookIssueHistory);
+        users.setBookIssueHistories(bookIssueHistories);
 
         return "Book Successfully issue";
     }
@@ -79,12 +94,69 @@ public class BookIssueHistoryServiceImpl implements BookIssueHistoryService {
     }
 
     @Override
-    public List<BookIssueHistory> getAllBookIssueHistory() {
-        return bookIssueHistoryRepository.findAll();
+    public List<Map<String, Object>> getAllBookIssueHistory() {
+
+
+       List<BookIssueHistory> bookIssueHistories = bookIssueHistoryRepository.findAll();
+       List<Map<String, Object>> obj = new ArrayList<>();
+
+       for(BookIssueHistory bookIssueHistory : bookIssueHistories)
+       {
+           Map<String, Object> m = new HashMap<>();
+
+           if(bookIssueHistory.getReturn_date() != null)
+           {
+
+               LocalDate returndate = bookIssueHistory.getReturn_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+               LocalDate duedate = bookIssueHistory.getDue_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+               long diff = ChronoUnit.DAYS.between(duedate,returndate);
+
+               if(diff > 0 && bookIssueHistory.getPenalty() == 0f)
+               {
+                   bookIssueHistory.setPenalty(diff*20f);
+                   bookIssueHistoryRepository.save(bookIssueHistory);
+               }
+           }
+           m.put("book", bookIssueHistory.getBooks());
+           m.put("user", bookIssueHistory.getUser());
+           m.put("history", bookIssueHistory);
+
+           obj.add(m);
+       }
+
+       return obj;
+
     }
 
     @Override
     public BookIssueHistory getBookIssueHistoryById(Long id) {
         return bookIssueHistoryRepository.getReferenceById(id);
+    }
+
+    @Override
+    public String setreturnbook(Long hid) {
+
+        BookIssueHistory bookIssueHistory = bookIssueHistoryRepository.getReferenceById(hid);
+
+        Date currentDate = new Date();
+
+        Books books = bookIssueHistory.getBooks();
+
+        books.setStatus("available");
+
+        bookIssueHistory.setBooks(books);
+
+        BooksInformation booksInformation = booksInformationRepository.getReferenceById(bookIssueHistory.getBookid());
+
+        booksInformation.setAvailable(booksInformation.getAvailable()+1);
+
+        booksInformationRepository.save(booksInformation);
+
+        bookIssueHistory.setReturn_date(currentDate);
+
+        bookIssueHistoryRepository.save(bookIssueHistory);
+
+        return "Successfully update return date";
     }
 }

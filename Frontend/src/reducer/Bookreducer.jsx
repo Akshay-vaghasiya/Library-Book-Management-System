@@ -56,6 +56,14 @@ const Bookreducer = (state, action) => {
         ...state,
         Books: books1,
       };
+
+    case "SET_ISSUED_DATA":
+
+      return {
+        ...state,
+        IssuedBooks : action.payload,
+      }
+
   }
 };
 

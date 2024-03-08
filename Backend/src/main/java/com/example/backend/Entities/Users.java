@@ -1,10 +1,13 @@
 package com.example.backend.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,19 +25,21 @@ public class Users {
     private String name;
 
     @Column(name = "email", nullable = false, unique = true)
+    @JsonIgnore
     private String email;
 
     @Column(name = "password", nullable = false, unique = true)
+    @JsonIgnore
     private String password;
 
     @Column(name = "total_penalty")
     private float total_penalty = 0;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Roles> roles;
+    @JsonIgnore
+    private List<Roles> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "user_history")
-    private List<BookIssueHistory> bookIssueHistories;
+    private List<BookIssueHistory> bookIssueHistories = new ArrayList<>();
 
 }

@@ -5,6 +5,7 @@ import com.example.backend.Entities.Users;
 import com.example.backend.Repository.RolesRepository;
 import com.example.backend.Repository.UsersRepository;
 import com.example.backend.Services.UsersService;
+import com.example.backend.payload.LoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,18 +27,23 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public String saveUserasUser(Users users) {
+    public String saveUserasUser(LoginDto users) {
+
+        Users users1 = new Users();
+        users1.setName(users.getName());
+        users1.setEmail(users.getEmail());
+        users1.setPassword(users.getPassword());
         Roles roles = rolesRepository.getReferenceById(2L);
 
-        List<Roles> roles1 = users.getRoles();
+        List<Roles> roles1 = users1.getRoles();
         if(roles1 == null) {
             roles1 = new ArrayList<>();
         }
         roles1.add(roles);
 
-        users.setRoles(roles1);
+        users1.setRoles(roles1);
 
-        usersRepository.save(users);
+        usersRepository.save(users1);
 
         return "User register successfully";
     }

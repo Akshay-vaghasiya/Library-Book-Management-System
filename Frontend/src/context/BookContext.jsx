@@ -1,6 +1,5 @@
 import {
   createContext,
-  useState,
   useContext,
   useEffect,
   useReducer,
@@ -12,6 +11,7 @@ const BookContext = createContext();
 
 const initialState = {
   Books: [],
+  IssuedBooks : [],
   isLoading: true,
   totalbooks: 0,
   issuedbooks: 0,
@@ -34,6 +34,17 @@ const BookProvider = ({ children }) => {
     }
   };
 
+  const getIssuedBooks = async () => {
+    try{
+      const res = await axios.get(import.meta.env.VITE_url + `/issue/showissuebooks`);
+
+      const issuedbook = res?.data;
+
+      dispatch({ type : "SET_ISSUED_DATA", payload : issuedbook});
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const deletebook = async (id) => {
 
@@ -71,11 +82,12 @@ const BookProvider = ({ children }) => {
 
   useEffect(() => {
     getBooks();
+    getIssuedBooks();
   }, []);
 
   return (
     <>
-      <BookContext.Provider value={{ ...state, deletebook, deleteOnebook, getBooks }}>
+      <BookContext.Provider value={{ ...state, deletebook, deleteOnebook, getBooks, getIssuedBooks }}>
         {children}
       </BookContext.Provider>
     </>

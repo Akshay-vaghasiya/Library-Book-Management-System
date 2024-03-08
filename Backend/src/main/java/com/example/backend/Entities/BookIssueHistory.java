@@ -34,6 +34,12 @@ public class BookIssueHistory {
     @Column(name = "penalty", nullable = true)
     private float penalty = 0;
 
+    @Column(name = "bookname", nullable = true)
+    private String bookname;
+
+    @Column(name = "bookInformationId", nullable = true)
+    private Long bookid;
+
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
     @JsonBackReference(value = "book_history")

@@ -132,7 +132,6 @@ const AddBook = () => {
       );
 
       if (response.data === "Book sucessfully added") {
-        await getBooks();
         setAuthor("");
         setTitle("");
         setAvailable(null);
@@ -298,7 +297,8 @@ const AddBook = () => {
                   </label>
                   <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                     <div className="space-y-1 text-center">
-                      <svg
+                     {
+                       image===null || image===undefined ? <svg
                         className="mx-auto h-12 w-12 text-gray-400"
                         stroke="currentColor"
                         fill="none"
@@ -311,7 +311,8 @@ const AddBook = () => {
                           strokeLinecap="round"
                           strokeLinejoin="round"
                         />
-                      </svg>
+                      </svg> : <img src={URL.createObjectURL(image)} alt="book image" />
+                     } 
                       <div className="flex text-sm text-gray-600">
                         <label
                           htmlFor="file-upload"

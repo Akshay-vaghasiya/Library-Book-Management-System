@@ -1,8 +1,12 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
+import { useBookContext } from "../../context/BookContext";
 
 const IssueBook = () => {
+
+  const {getIssuedBooks} = useBookContext();
+
   const [issuebookinfo, setIssuebookinfo] = useState({
     mainbookid: null,
     bookid: null,

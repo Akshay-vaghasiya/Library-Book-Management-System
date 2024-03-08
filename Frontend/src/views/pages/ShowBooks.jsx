@@ -8,12 +8,17 @@ import Confirmpopup from "../../components/Confirmpopup";
 import Editbookpopup from "../../components/Editbookpopup";
 
 const ShowBooks = () => {
-  const { Books, deletebook, deleteOnebook } = useBookContext();
+  const { Books, deletebook, deleteOnebook, getBooks } = useBookContext();
   const [dropdown, setDropdown] = useState(-1);
 
   useEffect(() => {
     initFlowbite();
   });
+
+  useEffect(()=> {
+
+      getBooks();
+  },[])
 
   return (
     <>
