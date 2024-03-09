@@ -22,32 +22,10 @@ const UserRegister = () => {
     const name1 = e.target.name;
     const value = e.target.value;
 
-    switch (name1) {
-      case "name":
-        setUserinfo({
-          ...userinfo,
-          name: value,
-        });
-        break;
-
-      case "email":
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const isValid = emailRegex.test(value);
-
-        setUserinfo({
-          ...userinfo,
-          email: value,
-          isValidEmail: isValid,
-        });
-        break;
-
-      case "password":
-        setUserinfo({
-          ...userinfo,
-          password: value,
-        });
-        break;
-    }
+    setUserinfo({
+      ...userinfo,
+      [name1]: value,
+    });
   };
 
   const handleuser = async (e) => {

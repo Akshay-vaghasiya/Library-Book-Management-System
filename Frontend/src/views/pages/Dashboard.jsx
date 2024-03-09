@@ -10,6 +10,17 @@ const Dashboard = () => {
     const navigate = useNavigate();
 
     const [searchterm, SetSearchterm] = useState("");
+
+    const [visible, setVisible] = useState(15);
+    const [show, setShow] = useState(true);
+
+    const showMoreIssuedBooks = () => {
+        if (visible < length) {
+          setVisible((prevValue) => prevValue + 15);
+        } else {
+          setShow(false);
+        }
+      };
  
   return (
    
@@ -53,11 +64,18 @@ const Dashboard = () => {
 
                            
                 <button
-                  className="px-6 py-2 leading-5 text-white transition-colors duration-200  bg-yellow-300 rounded-md hover:bg-yellow-400 focus:outline-none focus:bg-gray-600 w-60"
-                    onClick={() => navigate("/issuebook")}
+                  className="px-6 py-2 leading-5 text-white transition-colors duration-200  bg-yellow-400 rounded-md hover:bg-yellow-500 focus:outline-none focus:bg-gray-600 w-60"
+                    onClick={() => navigate("/addbook")}
                 >
                   {" "}
                   <span className="text-lg">+ </span> Add new book
+                </button>
+
+                <button
+                  className="px-6 py-2 leading-5 text-white transition-colors duration-200  bg-yellow-400 rounded-md hover:bg-yellow-500 focus:outline-none focus:bg-gray-600 w-60"
+                    onClick={() => navigate("/issuebook")}
+                >
+                  Issue new book
                 </button>
            
 
@@ -87,8 +105,8 @@ const Dashboard = () => {
                                 </thead>
                                 <tbody className='dark:bg-slate-50'>
 
-                                    {
-                                        (searchterm.length === 0 ? IssuedBooks : SearchIssueBooks).map((issuedbook, index) => {
+                                    { IssuedBooks && 
+                                        (searchterm.length === 0 ? IssuedBooks : SearchIssueBooks)?.slice(0, visible)?.map((issuedbook, index) => {
                                             return (
                                                 <tr key={index} className='text-center'>
                                                 
@@ -110,6 +128,15 @@ const Dashboard = () => {
 
                                 </tbody>
                             </table>
+
+                            <div
+          className="justify-center"
+          style={{
+            display: show && (searchterm.length === 0 ? IssuedBooks : SearchIssueBooks).length > 15 ? "flex" : "none",
+          }}
+        >
+          <button onClick={showMoreIssuedBooks} className="text-white my-2 bg-slate-500 border p-2 rounded-md hover:bg-slate-700">View More</button>
+        </div>
                         </div>
                     </div>
                 </div>

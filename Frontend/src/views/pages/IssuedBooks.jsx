@@ -3,6 +3,7 @@ import { useBookContext } from "../../context/BookContext";
 import axios from "axios";
 import { initFlowbite } from "flowbite";
 import { FaSearch } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const IssuedBooks = () => {
   const { IssuedBooks, getIssuedBooks, searchIssuedbook, SearchIssueBooks} = useBookContext();
@@ -10,6 +11,17 @@ const IssuedBooks = () => {
   const [searchterm, SetSearchterm] = useState("");
   const [searchissuedate, SetSearchissuedate] = useState("");
   const [searchreturndate, SetSearchreturndate] = useState("");
+
+  const [visible, setVisible] = useState(15);
+  const [show, setShow] = useState(true);
+
+  const showMoreIssuedBooks = () => {
+    if (visible < length) {
+      setVisible((prevValue) => prevValue + 15);
+    } else {
+      setShow(false);
+    }
+  };
 
   useEffect(() => {
     initFlowbite();
@@ -27,7 +39,7 @@ const IssuedBooks = () => {
         import.meta.env.VITE_url + `/issue/returnbook/${hid}`
       );
 
-      console.log(response.data);
+      toast.success(response.data);
 
       await getIssuedBooks();
     } catch (error) {
@@ -102,7 +114,7 @@ const IssuedBooks = () => {
 
               <tbody className="items-center">
                 {IssuedBooks.length > 0 &&
-                  (searchterm.length!==0 || searchissuedate.length !== 0 || searchreturndate.length !== 0 ? SearchIssueBooks :IssuedBooks)?.map((obj, index) => {
+                  (searchterm.length!==0 || searchissuedate.length !== 0 || searchreturndate.length !== 0 ? SearchIssueBooks :IssuedBooks)?.slice(0, visible)?.map((obj, index) => {
                     return (
                       <>
                         <tr
@@ -220,6 +232,15 @@ const IssuedBooks = () => {
                   })}
               </tbody>
             </table>
+
+            <div
+          className="justify-center"
+          style={{
+            display: show && (searchterm.length!==0 || searchissuedate.length !== 0 || searchreturndate.length !== 0 ? SearchIssueBooks :IssuedBooks).length > 15 ? "flex" : "none",
+          }}
+        >
+          <button onClick={showMoreIssuedBooks} className="text-white my-2 bg-slate-500 border p-2 rounded-md hover:bg-slate-700">View More</button>
+        </div>
           </div>
         </div>
       </div>

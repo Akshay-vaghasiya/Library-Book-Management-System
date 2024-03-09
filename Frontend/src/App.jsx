@@ -14,6 +14,7 @@ import IssuedBooks from './views/pages/IssuedBooks'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UserRegister from './views/pages/UserRegister'
+import { BookProvider } from './context/BookContext'
 
 
 function App() {
@@ -48,6 +49,9 @@ function App() {
           </>
         }
 
+        {
+          isLogin ? <BookProvider>
+
         <Routes>
 
           <Route path='/' element={isLogin ? <Dashboard /> : <LoginPage />} />
@@ -60,8 +64,20 @@ function App() {
           <Route path='*' element={isLogin ? <Dashboard />: <LoginPage />} />
 
         </Routes>
+          </BookProvider> : 
+          <Routes>
 
+          <Route path='/' element={isLogin ? <Dashboard /> : <LoginPage />} />
+          <Route path='/dashboard' element={isLogin ? <Dashboard /> : <LoginPage />} />
+          <Route path='/addbook' element={isLogin ? <AddBook /> : <LoginPage />} />
+          <Route path='/showbooks' element={isLogin ? <ShowBooks /> : <LoginPage />} />
+          <Route path='/issuebook' element={isLogin ? <IssueBook /> : <LoginPage />} />
+          <Route path='/issuedbooks' element={isLogin ? <IssuedBooks /> : <LoginPage />} />
+          <Route path='/userregister' element={isLogin ? <UserRegister /> : <LoginPage />} />
+          <Route path='*' element={isLogin ? <Dashboard />: <LoginPage />} />
 
+        </Routes>
+        }
 
       </BrowserRouter>
 

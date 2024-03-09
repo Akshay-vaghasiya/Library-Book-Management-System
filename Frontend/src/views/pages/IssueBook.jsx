@@ -20,42 +20,10 @@ const IssueBook = () => {
     const name = e.target.name;
     const value = e.target.value;
 
-    switch (name) {
-      case "mainbookid":
-        setIssuebookinfo({
-          ...issuebookinfo,
-          mainbookid: value,
-        });
-        break;
-
-      case "bookid":
-        setIssuebookinfo({
-          ...issuebookinfo,
-          bookid: value,
-        });
-        break;
-
-      case "userid":
-        setIssuebookinfo({
-          ...issuebookinfo,
-          userid: value,
-        });
-        break;
-
-      case "issuedate":
-        setIssuebookinfo({
-          ...issuebookinfo,
-          issuedate: value,
-        });
-        break;
-
-      case "duedate":
-        setIssuebookinfo({
-          ...issuebookinfo,
-          duedate: value,
-        });
-        break;
-    }
+    setIssuebookinfo({
+      ...issuebookinfo,
+      [name] : value,
+    });
   };
 
   const handleissuebook = async (e) => {
@@ -124,6 +92,7 @@ const IssueBook = () => {
                     type="number"
                     id="mainbookid"
                     name="mainbookid"
+                    value={issuebookinfo.mainbookid}
                     className="w-full mt-2 bg-white rounded border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                     onChange={(e) => handleChange(e)}
                   />
@@ -140,6 +109,7 @@ const IssueBook = () => {
                     id="bookid"
                     type="number"
                     name="bookid"
+                    value={issuebookinfo.bookid}
                     className="w-full mt-2 bg-white rounded border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                     onChange={(e) => handleChange(e)}
                   />
@@ -156,6 +126,7 @@ const IssueBook = () => {
                     id="userid"
                     type="number"
                     name="userid"
+                    value={issuebookinfo.userid}
                     className="w-full mt-2 bg-white rounded border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                     onChange={(e) => handleChange(e)}
                   />
@@ -172,6 +143,7 @@ const IssueBook = () => {
                     id="issuedate"
                     type="date"
                     name="issuedate"
+                    value={issuebookinfo.issuedate}
                     className="w-full mt-2 bg-white rounded border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                     onChange={(e) => handleChange(e)}
                   />
@@ -188,6 +160,7 @@ const IssueBook = () => {
                     id="duedate"
                     type="date"
                     name="duedate"
+                    value={issuebookinfo.duedate}
                     className="w-full mt-2 bg-white rounded border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                     onChange={(e) => handleChange(e)}
                   />

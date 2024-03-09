@@ -13,6 +13,18 @@ const ShowBooks = () => {
 
   const [searchterm, SetSearchterm] = useState("");
 
+  const [visible, setVisible] = useState(10);
+  const [show, setShow] = useState(true);
+
+  const showMoreBooks = () => {
+    if (visible < length) {
+      setVisible((prevValue) => prevValue + 10);
+    } else {
+      setShow(false);
+    }
+  };
+
+
   useEffect(() => {
     initFlowbite();
   });
@@ -61,7 +73,7 @@ const ShowBooks = () => {
 
               <tbody className="items-center">
                 {Books.length > 0 &&
-                  (searchterm.length===0?Books:SearchBooks)?.map((book, index) => {
+                  (searchterm.length===0?Books:SearchBooks)?.slice(0, visible)?.map((book, index) => {
                     return (
                       <>
                         <tr
@@ -70,16 +82,16 @@ const ShowBooks = () => {
                             index % 2 === 0 ? "bg-slate-50" : "bg-white"
                           }`}
                         >
-                          <td className="w-40 px-2">{book?.id}</td>
+                          <td className="w-40 px-2 text-nowrap">{book?.id}</td>
                           <td className="w-40 px-2 justify-center">
                             <img src={book?.image} alt="book image" />
                           </td>
-                          <td className="w-40 px-2">{book?.title}</td>
-                          <td className="w-40 px-2">{book?.author}</td>
-                          <td className="w-40 px-2">{book?.isbn}</td>
-                          <td className="w-40 px-2 ">{book?.category}</td>
-                          <td className="w-40 px-2">{book?.stock}</td>
-                          <td className="w-40 px-2">{book?.available}</td>
+                          <td className="w-40 px-2 text-nowrap">{book?.title}</td>
+                          <td className="w-40 px-2 text-nowrap">{book?.author}</td>
+                          <td className="w-40 px-2 text-nowrap">{book?.isbn}</td>
+                          <td className="w-40 px-2 text-nowrap">{book?.category}</td>
+                          <td className="w-40 px-2 text-nowrap">{book?.stock}</td>
+                          <td className="w-40 px-2 text-nowrap">{book?.available}</td>
                           <td className="w-16 px-1 text-xl">
                             
                             <button
@@ -207,7 +219,19 @@ const ShowBooks = () => {
                   })}
               </tbody>
             </table>
+
+            <div
+          className="justify-center"
+          style={{
+            display: show && (searchterm.length===0?Books:SearchBooks).length > 10 ? "flex" : "none",
+          }}
+        >
+          <button onClick={showMoreBooks} className="text-white my-2 bg-slate-500 border p-2 rounded-md hover:bg-slate-700">View More</button>
+        </div>
+
           </div>
+
+          
         </div>
       </div>
     </>

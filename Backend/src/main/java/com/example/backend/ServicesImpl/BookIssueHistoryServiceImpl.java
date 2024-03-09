@@ -132,20 +132,6 @@ public class BookIssueHistoryServiceImpl implements BookIssueHistoryService {
        {
            Map<String, Object> m = new HashMap<>();
 
-           if(bookIssueHistory.getReturn_date() != null)
-           {
-
-               LocalDate returndate = bookIssueHistory.getReturn_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-               LocalDate duedate = bookIssueHistory.getDue_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-               long diff = ChronoUnit.DAYS.between(duedate,returndate);
-
-               if(diff > 0 && bookIssueHistory.getPenalty() == 0f)
-               {
-                   bookIssueHistory.setPenalty(diff*20f);
-                   bookIssueHistoryRepository.save(bookIssueHistory);
-               }
-           }
            m.put("book", bookIssueHistory.getBooks());
            m.put("user", bookIssueHistory.getUser());
            m.put("history", bookIssueHistory);
@@ -174,6 +160,20 @@ public class BookIssueHistoryServiceImpl implements BookIssueHistoryService {
         books.setStatus("available");
 
         bookIssueHistory.setBooks(books);
+
+        LocalDate returndate = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate duedate = bookIssueHistory.getDue_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        long diff = ChronoUnit.DAYS.between(duedate,returndate)-1;
+
+        if(diff > 0 && bookIssueHistory.getPenalty() == 0f)
+        {
+            bookIssueHistory.setPenalty(diff*20f);
+            Users users = bookIssueHistory.getUser();
+            users.setTotal_penalty(users.getTotal_penalty() + diff*20f);
+            usersRepository.save(users);
+            bookIssueHistoryRepository.save(bookIssueHistory);
+        }
 
         BooksInformation booksInformation = booksInformationRepository.getReferenceById(bookIssueHistory.getBookid());
 
