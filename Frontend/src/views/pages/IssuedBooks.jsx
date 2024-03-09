@@ -1,10 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useBookContext } from "../../context/BookContext";
 import axios from "axios";
 import { initFlowbite } from "flowbite";
+import { FaSearch } from "react-icons/fa";
 
 const IssuedBooks = () => {
-  const { IssuedBooks, getIssuedBooks } = useBookContext();
+  const { IssuedBooks, getIssuedBooks, searchIssuedbook, SearchIssueBooks} = useBookContext();
+
+  const [searchterm, SetSearchterm] = useState("");
+  const [searchissuedate, SetSearchissuedate] = useState("");
+  const [searchreturndate, SetSearchreturndate] = useState("");
 
   useEffect(() => {
     initFlowbite();
@@ -34,9 +39,51 @@ const IssuedBooks = () => {
     <>
       <div className="p-4 sm:ml-64">
         <div className=" mt-[5.5rem]">
+
+        <div className="flex justify-around lg:flex-row flex-col">
+
+        <div className="flex my-5 justify-end gap-2 items-center">
+          
+          <p className="text-xl text-slate-500">Search IssueDate Base: </p>
+          <input type="date" className="bg-white rounded border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-lg outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" 
+            
+            onChange={(e) =>{
+              SetSearchissuedate(e.target.value.substring(0,10));
+              searchIssuedbook(searchterm,e.target.value.substring(0,10),searchreturndate);
+            }}
+
+                              />
+          </div>
+
+          <div className="flex my-5 justify-end gap-2 items-center">
+          
+          <p className="text-xl text-slate-500">Search ReturnDate Base: </p>
+          <input type="date" className="bg-white rounded border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-lg outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" 
+            
+            onChange={(e) =>{
+              SetSearchreturndate(e.target.value.substring(0,10));
+              searchIssuedbook(searchterm,searchissuedate,e.target.value.substring(0,10));
+            }}
+
+                              />
+          </div>
+       
+        <div className="flex my-5 justify-end gap-2 items-center">
+          
+          <p className="text-xl text-slate-500"><FaSearch/></p>
+          <input type="text" className="bg-white rounded border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-lg outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" 
+            placeholder='Search'
+            onChange={(e) =>{
+              SetSearchterm(e.target.value);
+              searchIssuedbook(e.target.value,searchissuedate,searchreturndate);
+            }}
+
+                              />
+          </div>
+          </div>
           <div className="overflow-x-scroll">
             <table>
-              <thead>
+              <thead className="bg-gray-800 text-white h-11">
                 <tr className="text-lg">
                   <th className="w-40 px-2">HistoryId</th>
                   <th className="w-40 px-2">Bookname</th>
@@ -55,7 +102,7 @@ const IssuedBooks = () => {
 
               <tbody className="items-center">
                 {IssuedBooks.length > 0 &&
-                  IssuedBooks?.map((obj, index) => {
+                  (searchterm.length!==0 || searchissuedate.length !== 0 || searchreturndate.length !== 0 ? SearchIssueBooks :IssuedBooks)?.map((obj, index) => {
                     return (
                       <>
                         <tr
@@ -72,13 +119,13 @@ const IssuedBooks = () => {
                           <td className="w-40 px-2">{obj?.book?.bid}</td>
                           <td className="w-40 px-2">{obj?.user?.name}</td>
                           <td className="w-40 px-2 ">{obj?.user?.uid}</td>
-                          <td className="w-40 px-2">
+                          <td className="w-40 px-2 text-nowrap">
                             {obj?.history?.issue_date.substring(0, 10)}
                           </td>
-                          <td className="w-40 px-2">
+                          <td className="w-40 px-2 text-nowrap">
                             {obj?.history?.due_date.substring(0, 10)}
                           </td>
-                          <td className="w-40 px-2">
+                          <td className="w-40 px-2 text-nowrap">
                             { obj?.history?.return_date && obj?.history?.return_date
 .substring(0, 10)}
                           </td>
@@ -101,21 +148,21 @@ const IssuedBooks = () => {
                             <div
                               id={`static-modal${obj?.history?.hid}`}
                               data-modal-backdrop="static"
-                              tabindex="-1"
+                              tabIndex="-1"
                               aria-hidden="true"
-                              class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+                              className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
                             >
-                              <div class="relative p-4 w-full max-w-md max-h-full">
-                                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                                  <div class="flex items-center justify-between p-4 md:p-5 rounded-t dark:border-gray-600">
+                              <div className="relative p-4 w-full max-w-md max-h-full">
+                                <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                  <div className="flex items-center justify-between p-4 md:p-5 rounded-t dark:border-gray-600">
                                   
                                     <button
                                       type="button"
-                                      class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                      className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                                       data-modal-hide={`static-modal${obj?.history?.hid}`}
                                     >
                                       <svg
-                                        class="w-3 h-3"
+                                        className="w-3 h-3"
                                         aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="none"
@@ -123,23 +170,23 @@ const IssuedBooks = () => {
                                       >
                                         <path
                                           stroke="currentColor"
-                                          stroke-linecap="round"
-                                          stroke-linejoin="round"
-                                          stroke-width="2"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
                                           d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
                                         />
                                       </svg>
-                                      <span class="sr-only">Close modal</span>
+                                      <span className="sr-only">Close modal</span>
                                     </button>
                                   </div>
 
-                                  <div class="p-4 md:p-5 space-y-4">
+                                  <div className="p-4 md:p-5 space-y-4">
                                     <p>
                                       You are confirm {obj?.user?.name} return {obj?.history?.bookname} book today.
                                     </p>
                                   </div>
 
-                                  <div class="flex items-center justify-end p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                                  <div className="flex items-center justify-end p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                                     <button
                                       data-modal-hide={`static-modal${obj?.history?.hid}`}
                                       type="button"
@@ -153,7 +200,7 @@ const IssuedBooks = () => {
                                     <button
                                       data-modal-hide={`static-modal${obj?.history?.hid}`}
                                       type="button"
-                                      class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-yellow-500 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                      className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-yellow-500 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                     >
                                       Cancle
                                     </button>

@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useBookContext } from "../../context/BookContext";
 import { MdDelete, MdEdit } from "react-icons/md";
-import { FaChevronDown, FaChevronRight } from "react-icons/fa";
+import { FaChevronDown, FaChevronRight,FaSearch  } from "react-icons/fa";
 import { initFlowbite } from "flowbite";
 import { toast } from "react-toastify";
 import Confirmpopup from "../../components/Confirmpopup";
 import Editbookpopup from "../../components/Editbookpopup";
 
 const ShowBooks = () => {
-  const { Books, deletebook, deleteOnebook, getBooks } = useBookContext();
+  const { Books, deletebook, deleteOnebook, getBooks, searchbook, SearchBooks} = useBookContext();
   const [dropdown, setDropdown] = useState(-1);
+
+  const [searchterm, SetSearchterm] = useState("");
 
   useEffect(() => {
     initFlowbite();
@@ -24,9 +26,23 @@ const ShowBooks = () => {
     <>
       <div className="p-4 sm:ml-64">
         <div className=" mt-[5.5rem] ">
+
+          <div className="flex my-5 justify-end gap-2 items-center">
+          
+          <p className="text-xl text-slate-500"><FaSearch/></p>
+          <input type="text" className="bg-white rounded border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-lg outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" 
+            placeholder='Search'
+            onChange={(e) =>{
+              SetSearchterm(e.target.value);
+              searchbook(e.target.value);
+            }}
+
+                              />
+          </div>
+
           <div className="overflow-x-scroll">
             <table>
-              <thead>
+              <thead className="bg-gray-800 text-white h-11">
                 <tr className="text-lg">
                   <th className="w-40 px-2">ID</th>
                   <th className="w-40 px-2">Image</th>
@@ -45,7 +61,7 @@ const ShowBooks = () => {
 
               <tbody className="items-center">
                 {Books.length > 0 &&
-                  Books?.map((book, index) => {
+                  (searchterm.length===0?Books:SearchBooks)?.map((book, index) => {
                     return (
                       <>
                         <tr

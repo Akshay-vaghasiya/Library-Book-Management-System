@@ -38,4 +38,10 @@ public class LoginController {
     public ResponseEntity<?> registerUser(@RequestBody LoginDto loginDto) {
         return ResponseEntity.ok(this.usersService.saveUserasUser(loginDto));
     }
+
+    @GetMapping(value = "/showusers")
+    public ResponseEntity<?> showUsers()
+    {
+        return ResponseEntity.ok(this.usersService.getAllUser());
+    }
 }

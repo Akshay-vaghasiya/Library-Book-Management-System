@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import axios from "axios";
+import { useBookContext } from "../../context/BookContext";
 
 const UserRegister = () => {
+
+  const {getIssuedBooks} = useBookContext();
+
   const [userinfo, setUserinfo] = useState({
     name: null,
     email: null,
@@ -79,6 +83,7 @@ const UserRegister = () => {
       );
 
       if (response.data === "User register successfully") {
+        await getIssuedBooks();
         toast.success(response.data);
         for (const key in userinfo) {
           userinfo[key] = null;

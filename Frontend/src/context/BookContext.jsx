@@ -12,9 +12,14 @@ const BookContext = createContext();
 const initialState = {
   Books: [],
   IssuedBooks : [],
+  Members : [],
+  SearchIssueBooks : [],
+  SearchBooks : [],
   isLoading: true,
   totalbooks: 0,
   issuedbooks: 0,
+  totalmembers : 0,
+  returnbooks : 0
 };
 
 const BookProvider = ({ children }) => {
@@ -28,6 +33,7 @@ const BookProvider = ({ children }) => {
 
       const books = res?.data;
 
+      console.log(books);
       dispatch({ type: "SET_API_DATA", payload: books });
     } catch (error) {
       console.log(error);
@@ -37,10 +43,12 @@ const BookProvider = ({ children }) => {
   const getIssuedBooks = async () => {
     try{
       const res = await axios.get(import.meta.env.VITE_url + `/issue/showissuebooks`);
+      const res1 = await axios.get(import.meta.env.VITE_url + `/user/showusers`);
 
       const issuedbook = res?.data;
+      const member = res1?.data;
 
-      dispatch({ type : "SET_ISSUED_DATA", payload : issuedbook});
+      dispatch({ type : "SET_ISSUED_DATA", payload : {issuedbook, member}});
     } catch (error) {
       console.log(error);
     }
@@ -80,6 +88,15 @@ const BookProvider = ({ children }) => {
 
   };
 
+  const searchIssuedbook = (searchtext,searchdate,searchreturndate) => {
+    dispatch({type : "SEARCH_ISSUED_BOOK", payload : {searchtext,searchdate,searchreturndate}});
+  }
+
+  const searchbook = (book) => {
+    dispatch({type : "SEARCH_BOOK", payload : book});
+  }
+
+
   useEffect(() => {
     getBooks();
     getIssuedBooks();
@@ -87,7 +104,7 @@ const BookProvider = ({ children }) => {
 
   return (
     <>
-      <BookContext.Provider value={{ ...state, deletebook, deleteOnebook, getBooks, getIssuedBooks }}>
+      <BookContext.Provider value={{ ...state, deletebook, deleteOnebook, getBooks, getIssuedBooks, searchIssuedbook, searchbook}}>
         {children}
       </BookContext.Provider>
     </>

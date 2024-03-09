@@ -34,14 +34,23 @@ public class BookIssueHistoryServiceImpl implements BookIssueHistoryService {
     @Override
     public String saveBookIssueHistory(BookIssueHistory bookIssueHistory, Long id, Long bid, Long uid) {
 
-        Users users = usersRepository.getReferenceById(uid);
-        List<Roles> roles = users.getRoles();
+        List<Users> users1 = usersRepository.findAll();
+        Users users = null;
+
+        for(Users user : users1)
+        {
+            if((long)user.getUid() == (long)uid)
+            {
+                users = user;
+            }
+        }
 
         if(users == null)
         {
             return "This User id is invalid";
         }
 
+        List<Roles> roles = users.getRoles();
         for(Roles roles1 : roles)
         {
             if(roles1.getRole().equals("ADMIN"))
@@ -50,7 +59,17 @@ public class BookIssueHistoryServiceImpl implements BookIssueHistoryService {
             }
         }
 
-        BooksInformation booksInformation = booksInformationRepository.getReferenceById(id);
+        List<BooksInformation> booksInformation2 = booksInformationRepository.findAll();
+
+        BooksInformation booksInformation = null;
+
+        for(BooksInformation booksInformation1 : booksInformation2)
+        {
+            if((long)booksInformation1.getId() == (long)id)
+            {
+                booksInformation = booksInformation1;
+            }
+        }
 
         if(booksInformation == null)
         {
@@ -58,7 +77,16 @@ public class BookIssueHistoryServiceImpl implements BookIssueHistoryService {
         }
 
         booksInformation.setAvailable(booksInformation.getAvailable()-1);
-        Books books = booksRepository.getReferenceById(bid);
+        List<Books> books1 = booksRepository.findAll();
+        Books books = null;
+
+        for(Books books2 : books1)
+        {
+            if((long)books2.getBid() == (long)bid)
+            {
+                books = books2;
+            }
+        }
 
         if(books == null)
         {
