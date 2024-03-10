@@ -57,7 +57,6 @@ const Bookreducer = (state, action) => {
     case "SET_ISSUED_DATA":
 
       const issuedbooks = action.payload.issuedbook.length;
-      const totalmembers = action.payload.member.length;
       let returnbooks = 0;
       action.payload.issuedbook?.map((book) => {
           if(book.history.return_date !== null)
@@ -69,10 +68,17 @@ const Bookreducer = (state, action) => {
       return {
         ...state,
         IssuedBooks : action.payload.issuedbook,
-        Members : action.payload.member,
         issuedbooks,
         returnbooks,
-        totalmembers
+      }
+
+    case "SET_USER_DATA":
+      const totalmembers = action.payload.length;
+
+      return {
+        ...state,
+        Members : action.payload,
+        totalmembers,
       }
 
     case "SEARCH_ISSUED_BOOK":
@@ -118,6 +124,43 @@ const Bookreducer = (state, action) => {
         ...state,
         SearchBooks,
       }
+
+    case "SEARCH_MEMBER" :
+      let SearchMembers = state.Members.filter((member) => {
+        return member.uid.toString().includes(action.payload.toLowerCase()) ||
+        member.name.toLowerCase().includes(action.payload.toLowerCase());
+    })
+
+      return {
+        ...state,
+        SearchMembers,
+      }
+
+    case "PENALTY_PAYMENT" :
+      let Members = [...state?.Members]
+      
+      
+      Members = Members?.map((member) => {
+        
+          let penalty = 0;
+
+          member.bookIssueHistories.map((history) => {
+              if(history.hid === action.payload)
+              {
+                  penalty += history.penalty;
+              }
+          })
+
+          member.total_penalty -= penalty;
+          
+          return member;
+      })
+
+      return {
+        ...state,
+        Members,
+      }
+
   }
 };
 

@@ -15,6 +15,7 @@ const initialState = {
   Members : [],
   SearchIssueBooks : [],
   SearchBooks : [],
+  SearchMembers : [],
   isLoading: true,
   totalbooks: 0,
   issuedbooks: 0,
@@ -33,8 +34,20 @@ const BookProvider = ({ children }) => {
 
       const books = res?.data;
 
-      console.log(books);
       dispatch({ type: "SET_API_DATA", payload: books });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getUsers = async () => {
+    try {
+
+      const res = await axios.get(import.meta.env.VITE_url + `/user/showusers`);
+
+      const users = res?.data;
+      
+      dispatch({ type: "SET_USER_DATA", payload: users });
     } catch (error) {
       console.log(error);
     }
@@ -43,12 +56,10 @@ const BookProvider = ({ children }) => {
   const getIssuedBooks = async () => {
     try{
       const res = await axios.get(import.meta.env.VITE_url + `/issue/showissuebooks`);
-      const res1 = await axios.get(import.meta.env.VITE_url + `/user/showusers`);
 
       const issuedbook = res?.data;
-      const member = res1?.data;
 
-      dispatch({ type : "SET_ISSUED_DATA", payload : {issuedbook, member}});
+      dispatch({ type : "SET_ISSUED_DATA", payload : {issuedbook}});
     } catch (error) {
       console.log(error);
     }
@@ -96,15 +107,27 @@ const BookProvider = ({ children }) => {
     dispatch({type : "SEARCH_BOOK", payload : book});
   }
 
+  const searchmember = (member) => {
+    dispatch({type : "SEARCH_MEMBER", payload : member});
+  }
+
+  const paypenalty = (hid) => {
+    dispatch({type : "PENALTY_PAYMENT", payload : hid});
+  }
+
+  const returnbook = (hid) => {
+    dispatch({type : "RETURN_BOOK_USERUPDATE", payload : hid});
+  }
 
   useEffect(() => {
     getBooks();
     getIssuedBooks();
+    getUsers();
   }, []);
 
   return (
     <>
-      <BookContext.Provider value={{ ...state, deletebook, deleteOnebook, getBooks, getIssuedBooks, searchIssuedbook, searchbook}}>
+      <BookContext.Provider value={{ ...state, deletebook, deleteOnebook, getBooks, getIssuedBooks, searchIssuedbook, searchbook, searchmember, paypenalty, returnbook}}>
         {children}
       </BookContext.Provider>
     </>

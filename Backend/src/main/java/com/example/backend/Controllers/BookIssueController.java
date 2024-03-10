@@ -34,4 +34,10 @@ public class BookIssueController {
     {
         return ResponseEntity.ok(this.bookIssueHistoryService.setreturnbook(hid));
     }
+
+    @PutMapping(value = "/paypenalty/{hid}")
+    public ResponseEntity<?> paypenalty(@PathVariable Long hid)
+    {
+        return ResponseEntity.ok(this.bookIssueHistoryService.paypenalty(hid));
+    }
 }

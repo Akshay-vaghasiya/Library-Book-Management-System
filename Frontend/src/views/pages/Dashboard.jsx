@@ -15,7 +15,7 @@ const Dashboard = () => {
     const [show, setShow] = useState(true);
 
     const showMoreIssuedBooks = () => {
-        if (visible < length) {
+        if (visible < IssuedBooks.length) {
           setVisible((prevValue) => prevValue + 15);
         } else {
           setShow(false);
@@ -64,7 +64,7 @@ const Dashboard = () => {
 
                            
                 <button
-                  className="px-6 py-2 leading-5 text-white transition-colors duration-200  bg-yellow-400 rounded-md hover:bg-yellow-500 focus:outline-none focus:bg-gray-600 w-60"
+                  className="px-6 py-2 leading-5 text-white transition-colors duration-200  bg-yellow-400 rounded-md hover:bg-yellow-500 focus:outline-none focus:bg-gray-600 w-56"
                     onClick={() => navigate("/addbook")}
                 >
                   {" "}
@@ -72,7 +72,7 @@ const Dashboard = () => {
                 </button>
 
                 <button
-                  className="px-6 py-2 leading-5 text-white transition-colors duration-200  bg-yellow-400 rounded-md hover:bg-yellow-500 focus:outline-none focus:bg-gray-600 w-60"
+                  className="px-6 py-2 leading-5 text-white transition-colors duration-200  bg-yellow-400 rounded-md hover:bg-yellow-500 focus:outline-none focus:bg-gray-600 w-56"
                     onClick={() => navigate("/issuebook")}
                 >
                   Issue new book
@@ -84,7 +84,7 @@ const Dashboard = () => {
                               <input type="text" placeholder='Search' className="bg-white rounded border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" 
                                 onChange={(e) => {
                                     SetSearchterm(e.target.value);
-                                    searchIssuedbook(e.target.value);
+                                    searchIssuedbook(e.target.value,"","");
                                 }}
                               />
                            </div>
@@ -94,13 +94,12 @@ const Dashboard = () => {
                                 <thead className="thead-dark bg-gray-800 text-white text-nowrap">
                                     <tr>
                                         
-                                    <th className="py-2">Member Name</th>
-                                        <th className="py-2">Book Title</th>
-                                        <th className="py-2">Book ID</th>
-                                        <th className="py-2">Issue Date</th>
-                                        <th className="py-2">Due Date</th>
-                                        <th className="py-2">Return Date</th>
-                                        <th className="py-2"></th>
+                                    <th className="w-40 py-2 px-2">Member Name</th>
+                                        <th className="w-40 py-2 px-2">Book Title</th>
+                                        <th className="w-40 py-2 px-2">Book ID</th>
+                                        <th className="w-40 py-2 px-2">Issue Date</th>
+                                        <th className="w-40 py-2 px-2">Due Date</th>
+                                        <th className="w-40 py-2 px-2">Return Date</th>
                                     </tr>
                                 </thead>
                                 <tbody className='dark:bg-slate-50'>
@@ -108,17 +107,19 @@ const Dashboard = () => {
                                     { IssuedBooks && 
                                         (searchterm.length === 0 ? IssuedBooks : SearchIssueBooks)?.slice(0, visible)?.map((issuedbook, index) => {
                                             return (
-                                                <tr key={index} className='text-center'>
+                                                <tr key={index} className={`text-center ${
+                            index % 2 === 0 ? "bg-slate-50" : "bg-white"
+                          } h-16`}>
                                                 
-                                                    <td className="py-2">{issuedbook?.user?.name}</td>
-                                                    <td className="py-2">{issuedbook?.history?.bookname}</td>
-                                                    <td className="py-2">{issuedbook?.book?.bid}</td>
-                                                    <td className="py-2 text-nowrap">{issuedbook?.history?.issue_date.substring(0,10)}</td>
-                                                    <td className="py-2 text-nowrap">{issuedbook?.history?.due_date.substring(0,10)}</td>
+                                                    <td className="py-2 px-2">{issuedbook?.user?.name}</td>
+                                                    <td className="py-2 px-2">{issuedbook?.history?.bookname}</td>
+                                                    <td className="py-2 px-2">{issuedbook?.book?.bid}</td>
+                                                    <td className="py-2 px-2 text-nowrap">{issuedbook?.history?.issue_date.substring(0,10)}</td>
+                                                    <td className="py-2 px-2 text-nowrap">{issuedbook?.history?.due_date.substring(0,10)}</td>
 
                                                     {
                                                         issuedbook?.history?.return_date==null ? <></> :  
-                                                    <td className="py-2 text-nowrap">{issuedbook?.history?.return_date.substring(0,10)}</td>
+                                                    <td className="py-2 px-2 text-nowrap">{issuedbook?.history?.return_date.substring(0,10)}</td>
                                                     }
                                                     
                                                 </tr>

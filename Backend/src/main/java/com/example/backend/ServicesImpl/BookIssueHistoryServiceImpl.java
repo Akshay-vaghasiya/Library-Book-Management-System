@@ -6,6 +6,7 @@ import com.example.backend.Repository.BooksInformationRepository;
 import com.example.backend.Repository.BooksRepository;
 import com.example.backend.Repository.UsersRepository;
 import com.example.backend.Services.BookIssueHistoryService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -164,7 +165,7 @@ public class BookIssueHistoryServiceImpl implements BookIssueHistoryService {
         LocalDate returndate = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate duedate = bookIssueHistory.getDue_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-        long diff = ChronoUnit.DAYS.between(duedate,returndate)-1;
+        long diff = ChronoUnit.DAYS.between(duedate,returndate);
 
         if(diff > 0 && bookIssueHistory.getPenalty() == 0f)
         {
@@ -186,5 +187,21 @@ public class BookIssueHistoryServiceImpl implements BookIssueHistoryService {
         bookIssueHistoryRepository.save(bookIssueHistory);
 
         return "Successfully update return date";
+    }
+
+    @Override
+    public String paypenalty(Long hid) {
+
+        BookIssueHistory bookIssueHistory = bookIssueHistoryRepository.getReferenceById(hid);
+        Users users = bookIssueHistory.getUser();
+
+        users.setTotal_penalty(users.getTotal_penalty()-bookIssueHistory.getPenalty());
+        usersRepository.save(users);
+
+        bookIssueHistory.setPenalty(0f);
+
+        bookIssueHistoryRepository.save(bookIssueHistory);
+
+        return "Successfully payment done.";
     }
 }

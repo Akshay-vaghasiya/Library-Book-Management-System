@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useBookContext } from "../../context/BookContext";
 import axios from "axios";
 import { initFlowbite } from "flowbite";
@@ -6,7 +6,7 @@ import { FaSearch } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 const IssuedBooks = () => {
-  const { IssuedBooks, getIssuedBooks, searchIssuedbook, SearchIssueBooks} = useBookContext();
+  const { IssuedBooks, getIssuedBooks, searchIssuedbook, SearchIssueBooks, getUsers,paypenalty} = useBookContext();
 
   const [searchterm, SetSearchterm] = useState("");
   const [searchissuedate, SetSearchissuedate] = useState("");
@@ -16,7 +16,7 @@ const IssuedBooks = () => {
   const [show, setShow] = useState(true);
 
   const showMoreIssuedBooks = () => {
-    if (visible < length) {
+    if (visible < IssuedBooks.length) {
       setVisible((prevValue) => prevValue + 15);
     } else {
       setShow(false);
@@ -39,9 +39,29 @@ const IssuedBooks = () => {
         import.meta.env.VITE_url + `/issue/returnbook/${hid}`
       );
 
+      await getIssuedBooks();
       toast.success(response.data);
 
+      
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handlepenalty = async (e, hid) => {
+    e.preventDefault();
+
+    try {
+      
+      paypenalty(hid);
+      const response = await axios.put(
+        import.meta.env.VITE_url + `/issue/paypenalty/${hid}`
+        );
+
       await getIssuedBooks();
+      toast.success(response.data);
+
     } catch (error) {
       console.log(error);
     }
@@ -116,9 +136,8 @@ const IssuedBooks = () => {
                 {IssuedBooks.length > 0 &&
                   (searchterm.length!==0 || searchissuedate.length !== 0 || searchreturndate.length !== 0 ? SearchIssueBooks :IssuedBooks)?.slice(0, visible)?.map((obj, index) => {
                     return (
-                      <>
+                      <Fragment key={index+30}>
                         <tr
-                          key={index + 30}
                           className={`text-center ${
                             index % 2 === 0 ? "bg-slate-50" : "bg-white"
                           } h-16`}
@@ -141,17 +160,96 @@ const IssuedBooks = () => {
                             { obj?.history?.return_date && obj?.history?.return_date
 .substring(0, 10)}
                           </td>
-                          <td className="w-40 px-2">{obj?.history?.penalty}</td>
+                          <td className="w-40 px-2">&#x20b9; {obj?.history?.penalty}</td>
                           
 
                           <td>
                             {
-                              obj?.history?.return_date !== null ? <></> : <>
+                              obj?.history?.return_date !== null ?
+                                  (obj?.history?.penalty !== 0 ?
+                                <>
+
+                                  <button
+                              data-modal-target={`static-modal${obj?.history?.hid}1111000`}
+                              data-modal-toggle={`static-modal${obj?.history?.hid}1111000`}
+                              className='bg-blue-500 rounded-md h-10 w-20 text-white hover:bg-blue-600'
+                              type="button"
+                            >
+                              Pay
+                            </button>
+
+                            <div
+                              id={`static-modal${obj?.history?.hid}1111000`}
+                              data-modal-backdrop="static"
+                              tabIndex="-1"
+                              aria-hidden="true"
+                              className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+                            >
+                              <div className="relative p-4 w-full max-w-md max-h-full">
+                                <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                  <div className="flex items-center justify-between p-4 md:p-5 rounded-t dark:border-gray-600">
+                                  
+                                    <button
+                                      type="button"
+                                      className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                      data-modal-hide={`static-modal${obj?.history?.hid}1111000`}
+                                    >
+                                      <svg
+                                        className="w-3 h-3"
+                                        aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 14 14"
+                                      >
+                                        <path
+                                          stroke="currentColor"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                          d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                                        />
+                                      </svg>
+                                      <span className="sr-only">Close modal</span>
+                                    </button>
+                                  </div>
+
+                                  <div className="p-4 md:p-5 space-y-2">
+                                    <p>
+                                      {obj?.user?.name} paid &#x20b9;{obj?.history?.penalty} amount
+                                    </p>
+                                  </div>
+
+                                  <div className="flex items-center justify-center p-4 md:p-5  border-gray-200 rounded-b dark:border-gray-600">
+                                    <button
+                                      data-modal-hide={`static-modal${obj?.history?.hid}1111000`}
+                                      type="button"
+                                      className='bg-blue-500 rounded-md h-10 w-20 text-white hover:bg-blue-600'
+                                      onClick={(e) => {
+                                        handlepenalty(e, obj?.history?.hid);
+                                      }}
+                                    >
+                                      Pay
+                                    </button>
+                                    <button
+                                      data-modal-hide={`static-modal${obj?.history?.hid}1111000`}
+                                      type="button"
+                                      className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-yellow-500 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                    >
+                                      Cancle
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                                  
+                                </>
+                                   : <></>)
+                               : <>
 
                               <button
                               data-modal-target={`static-modal${obj?.history?.hid}`}
                               data-modal-toggle={`static-modal${obj?.history?.hid}`}
-                              className='bg-yellow-400 rounded-md h-10 w-20 text-white'
+                              className='bg-yellow-400 rounded-md h-10 w-20 text-white hover:bg-yellow-500'
                               type="button"
                             >
                               Return
@@ -221,13 +319,17 @@ const IssuedBooks = () => {
                               </div>
                             </div>
 
+                            
+
+                            
+
                               </>
                             }
 
                             
                           </td>
                         </tr>
-                      </>
+                      </Fragment>
                     );
                   })}
               </tbody>

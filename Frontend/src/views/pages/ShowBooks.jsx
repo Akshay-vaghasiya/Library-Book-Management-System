@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useBookContext } from "../../context/BookContext";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { FaChevronDown, FaChevronRight,FaSearch  } from "react-icons/fa";
@@ -17,7 +17,7 @@ const ShowBooks = () => {
   const [show, setShow] = useState(true);
 
   const showMoreBooks = () => {
-    if (visible < length) {
+    if (visible < Books.length) {
       setVisible((prevValue) => prevValue + 10);
     } else {
       setShow(false);
@@ -75,9 +75,8 @@ const ShowBooks = () => {
                 {Books.length > 0 &&
                   (searchterm.length===0?Books:SearchBooks)?.slice(0, visible)?.map((book, index) => {
                     return (
-                      <>
+                      <Fragment key={index+30}>
                         <tr
-                          key={index + 30}
                           className={`text-center ${
                             index % 2 === 0 ? "bg-slate-50" : "bg-white"
                           }`}
@@ -214,7 +213,7 @@ const ShowBooks = () => {
                             <br />
                           </>
                         )}
-                      </>
+                      </Fragment>
                     );
                   })}
               </tbody>

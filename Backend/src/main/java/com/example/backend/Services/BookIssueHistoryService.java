@@ -14,4 +14,5 @@ public interface BookIssueHistoryService {
     public List<Map<String, Object>> getAllBookIssueHistory();
     public BookIssueHistory getBookIssueHistoryById(Long id);
     public String setreturnbook(Long hid);
+    public String paypenalty(Long hid);
 }
