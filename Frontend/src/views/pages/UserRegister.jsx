@@ -22,6 +22,20 @@ const UserRegister = () => {
     const name1 = e.target.name;
     const value = e.target.value;
 
+    if(name1 === 'email')
+    {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const isValid = emailRegex.test(value);
+
+        setUserinfo({
+          ...userinfo,
+          email: value,
+          isValidEmail: isValid,
+        });
+
+        return;
+    }
+
     setUserinfo({
       ...userinfo,
       [name1]: value,

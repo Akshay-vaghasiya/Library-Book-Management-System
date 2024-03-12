@@ -6,12 +6,10 @@ import com.example.backend.Repository.BooksInformationRepository;
 import com.example.backend.Repository.BooksRepository;
 import com.example.backend.Repository.UsersRepository;
 import com.example.backend.Services.BookIssueHistoryService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -69,6 +67,21 @@ public class BookIssueHistoryServiceImpl implements BookIssueHistoryService {
             if((long)booksInformation1.getId() == (long)id)
             {
                 booksInformation = booksInformation1;
+
+                List<Books> books = booksInformation.getBooks();
+                boolean isprecent = false;
+                for(Books books1 : books)
+                {
+                    if((long)books1.getBid() == (long)bid)
+                    {
+                        isprecent = true;
+                    }
+                }
+
+                if(isprecent == false)
+                {
+                    return "This bookid is not enterd main bookid";
+                }
             }
         }
 
@@ -93,6 +106,7 @@ public class BookIssueHistoryServiceImpl implements BookIssueHistoryService {
         {
             return "This book id is invalid";
         }
+
 
         if(books.getStatus().equals("not available"))
         {
